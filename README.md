@@ -18,23 +18,23 @@ O modelo é avaliado em dados de 5 minutos dos 30 ativos do índice Dow Jones In
 Entrada: X_norm [B, 1, 79]   ← 79 pontos intradiários (5 min, 14:30–20:30 UTC), normalizados por dia
 
                     ┌─────────────────────────────┐
-                    │          ENCODER             │
+                    │          ENCODER            │
                     │  Conv1D(1→f1, k1) + ReLU    │
-                    │  MaxPool(2)                  │
+                    │  MaxPool(2)                 │
                     │  Conv1D(f1→f2, k2) + ReLU   │
-                    │  MaxPool(2)                  │
+                    │  MaxPool(2)                 │
                     │  Conv1D(f2→f3, k3) + ReLU   │
-                    │  Flatten → Linear → z [B,64] │
+                    │  Flatten → Linear → z [B,64]│
                     └──────────────┬──────────────┘
                                    │
                     ┌──────────────┴──────────────┐
                     │                             │
           ┌─────────▼──────────┐     ┌────────────▼──────────┐
-          │      DECODER        │     │  TREND DISCRIMINATOR  │
-          │  Linear → reshape   │     │  Dropout(entrada)     │
-          │  ConvTranspose1d ×3 │     │  Linear(64) + ReLU   │
-          │  Sigmoid            │     │  Linear(2) + Sigmoid  │
-          │  x_hat [B,1,79]     │     │  [up, down] ∈ [0,1]  │
+          │      DECODER       │     │  TREND DISCRIMINATOR  │
+          │  Linear → reshape  │     │  Dropout(entrada)     │
+          │  ConvTranspose1d ×3│     │  Linear(64) + ReLU    │
+          │  Sigmoid           │     │  Linear(2) + Sigmoid  │
+          │  x_hat [B,1,79]    │     │  [up, down] ∈ [0,1]   │
           └────────────────────┘     └───────────────────────┘
 
 Loss total = λ_recon · MSE(x_hat, x) + λ_adv · MSE(trend_hat, y_trend)
