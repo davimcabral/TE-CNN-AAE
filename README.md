@@ -79,9 +79,20 @@ O TE-CNN-AAE produziu embeddings com separação de clusters significativamente 
 
 ```
 .
-├── TE_CNN_AAE.ipynb                  ← notebook principal (pipeline completo)
+├── TE_CNN_AAE.ipynb                   ← notebook principal (pipeline + visualizações)
 ├── README.md
-└── exp_tecnn_mock_protocol/          ← gerado ao executar o pipeline
+├── data/                              ← checkpoints ZIP para reprodução rápida
+│   ├── after_mockdata.zip
+│   ├── after_te_hsearch.zip
+│   ├── after_ae_hsearch.zip
+│   ├── after_te_train.zip
+│   ├── after_te_embed.zip
+│   ├── after_ae_train.zip
+│   ├── after_ae_embed.zip
+│   ├── after_labels.zip
+│   ├── after_analyze.zip
+│   └── after_lstmstudy_partial.zip
+└── exp_tecnn_mock_protocol/           ← gerado ao executar o pipeline
     ├── data/
     │   ├── SUMMARY.csv
     │   └── {TICKER}/data_79.npz     ← séries intradiárias por ticker
@@ -130,40 +141,70 @@ O TE-CNN-AAE produziu embeddings com separação de clusters significativamente 
 pip install numpy pandas torch umap-learn scikit-learn matplotlib
 ```
 
-### Execução rápida (dados mock, ~1–3 horas no Colab)
+### Reprodução instantânea a partir dos checkpoints
 
-Execute todas as células do notebook. O ponto de entrada ao final da célula principal é:
+O repositório inclui ZIPs de checkpoint em `data/` com todo o estado do experimento já concluído. O notebook os detecta e baixa automaticamente do GitHub caso não existam localmente, restaurando o experimento sem precisar executar nenhuma etapa de treino:
 
 ```python
-DJIA_30 = ["AAPL", "MSFT", "JPM", "CVX", "JNJ"]  # reduza para testar mais rápido
-
-run_mock_pipeline_tecnn_protocol(
-    exp_root="./exp_tecnn_mock_protocol",
-    restore_zips=True,     # retoma de onde parou após reiniciar a sessão
-    enable_bundles=True,   # salva ZIPs de checkpoint a cada etapa
-    search_epochs=5,       # 20 no paper
-    n_grid_repeats=3,      # 10 no paper
-    n_eval_runs=20,        # 100 no paper
-)
+AUTO_DOWNLOAD_GITHUB = True   # baixa do GitHub apenas os ZIPs ausentes localmente
+AUTO_RESTORE_ZIPS    = True   # restaura o estado a partir dos ZIPs disponíveis
+AUTO_RUN_MOCK_RESUME = True   # executa o pipeline (pulando etapas já concluídas)
 ```
 
-Para reproduzir o protocolo completo do artigo (30 tickers, 20 épocas, 100 runs), remova os parâmetros reduzidos e use a lista `DJIA_30` completa. Estimativa: **36–48 horas** de GPU.
+Com todos os checkpoints disponíveis, o pipeline detecta `lstmstudy_done: true` no manifest e encerra em segundos, deixando todos os artefatos prontos para visualização.
+
+### Execução do zero (modo mínimo, ~1–3 horas no Colab)
+
+Para executar o pipeline sem usar os checkpoints, defina `run_pipeline_minimo = True` ao final do notebook:
+
+```python
+run_pipeline_minimo = True   # True = 5 tickers / False = 30 tickers
+
+if run_pipeline_minimo:
+    DJIA_30 = ["AAPL", "MSFT", "JPM", "CVX", "JNJ"]
+    run_mock_pipeline_tecnn_protocol(
+        exp_root="./exp_tecnn_mock_protocol",
+        restore_zips=True,
+        enable_bundles=True,
+        search_epochs=5,    # 20 no paper
+        n_grid_repeats=3,   # 10 no paper
+        n_eval_runs=20,     # 100 no paper
+    )
+```
+
+### Execução completa (protocolo do artigo, ~36–48 horas no Colab)
+
+Para reproduzir o protocolo completo com os 30 tickers DJIA, defina `run_pipeline_minimo = False`. Todos os parâmetros voltam aos valores do artigo (20 épocas, 10 repetições por grid point, 100 runs de avaliação).
 
 ### Resumabilidade
 
-O pipeline é totalmente resumável. Se a sessão do Colab for interrompida, basta reexecutar — ele detecta automaticamente os ZIPs de checkpoint e continua da etapa onde parou, sem reprocessar o que já foi concluído.
+O pipeline é totalmente resumável. Se a sessão do Colab for interrompida em qualquer etapa, basta reexecutar — ele detecta automaticamente os ZIPs de checkpoint (locais ou no GitHub) e continua de onde parou, sem reprocessar o que já foi concluído.
 
 ### Visualização dos artefatos
 
-Após o pipeline terminar, execute a célula de visualização (última célula do notebook) para gerar e exibir:
+Após o pipeline terminar, execute as células de visualização do notebook para gerar e exibir todas as figuras descritas na seção **Visualizações geradas** acima.
 
-- **Fig 2** — Histograma de ângulos de tendência
-- **Fig 4a/4b** — UMAP dos embeddings TE-CNN-AAE e CNN-AE
-- **Fig 4c** — UMAP dos dados brutos (PRD)
-- **Fig 5** — Heatmap de performance por ticker
-- **Fig 6** — Boxplot de acurácias por abordagem
-- **Tabela III** — Silhouette Score e Davies-Bouldin Index
-- **Tabela V** — Win rates do teste Mann-Whitney
+---
+
+## Visualizações geradas
+
+O notebook contém células de visualização que reproduzem as figuras do artigo e acrescentam análises adicionais. Todas as figuras são salvas automaticamente em `outputs/`.
+
+| Figura | Descrição | Arquivo |
+|---|---|---|
+| Fig 2 | Histograma de ângulos de tendência (dados de treino) | `fig2_angle_histogram.png` |
+| Fig 3 | Exemplos de séries intradiárias: downtrend, lateralização, uptrend | `fig3_intraday_examples.png` |
+| Fig 4a | UMAP dos embeddings TE-CNN-AAE (colorido por faixa de ângulo) | `analyze/tecnn/umap_*.png` |
+| Fig 4b | UMAP dos embeddings CNN-AE | `analyze/cnnae/umap_*.png` |
+| Fig 4c | UMAP dos dados brutos normalizados (PRD) | `fig4c_umap_prd.png` |
+| Fig 5 | Heatmap de performance média por ticker e abordagem | `fig5_heatmap.png` |
+| Fig 6 | Boxplot de acurácias (distribuição das 100 execuções) | `fig6_boxplot.png` |
+| — | Tabela III: Silhouette Score e Davies-Bouldin Index | exibida no notebook |
+| — | Tabela V: Win rates do teste Mann-Whitney | exibida no notebook |
+| Extra | Séries brutas EOD completas por ativo (painel individual) | `eod_series_individual.png` |
+| Extra | Séries brutas EOD sobrepostas, rebaseadas em 100 | `eod_series_overlay.png` |
+
+> **Nota sobre a Fig 3:** o layout usa 3 linhas × 2 colunas (regime × escala), deixando explícito que cada par de painéis mostra a mesma série — à esquerda normalizada em [0,1] (entrada do modelo) e à direita em preço real (USD).
 
 ---
 
@@ -211,3 +252,4 @@ Após o pipeline terminar, execute a célula de visualização (última célula 
 - Os dados reais (Polygon.io) requerem assinatura paga. Esta implementação usa dados sintéticos que replicam a estrutura estatística das séries intradiárias para fins de validação do pipeline.
 - O ticker DOW é excluído do estudo LSTM por histórico de negociação insuficiente no período coberto, conforme o artigo original.
 - A implementação usa `torch`, não `tensorflow`. O decoder usa `ConvTranspose1d` com stride real, sem `F.interpolate`.
+- Os dados sintéticos não refletem eventos reais de mercado (ex.: COVID-19 em 2020). As séries EOD plotadas nas visualizações extras são geradas pelo modelo mock e não correspondem aos preços históricos reais dos ativos.
