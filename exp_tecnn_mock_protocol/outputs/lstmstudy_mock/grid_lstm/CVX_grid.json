@@ -1,0 +1,24 @@
+{
+  "ticker": "CVX",
+  "can_execute": true,
+  "tau_ticker": 1.310000000000001,
+  "entropy": 1.584837022090274,
+  "best_params_raw": {
+    "batch_size": 4,
+    "window": 30,
+    "learning_rate": 0.0001,
+    "lstm_units": 16
+  },
+  "best_params_encoder": {
+    "batch_size": 64,
+    "window": 15,
+    "learning_rate": 0.01,
+    "lstm_units": 16
+  },
+  "best_params_encoder_adversarial": {
+    "batch_size": 64,
+    "window": 15,
+    "learning_rate": 0.01,
+    "lstm_units": 128
+  }
+}

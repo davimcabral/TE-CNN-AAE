@@ -1,0 +1,6 @@
+ticker,n_days,source
+AAPL,1350,MockDaily79Source
+MSFT,1350,MockDaily79Source
+JPM,1350,MockDaily79Source
+CVX,1350,MockDaily79Source
+JNJ,1350,MockDaily79Source

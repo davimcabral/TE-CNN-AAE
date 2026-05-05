@@ -1,0 +1,22 @@
+{
+  "trial_id": "te_f16-64-64_k7-7-7",
+  "model_kind": "te",
+  "arch": {
+    "filters": [
+      16,
+      64,
+      64
+    ],
+    "kernels": [
+      7,
+      7,
+      7
+    ],
+    "z_dim": 64,
+    "dropout": 0.1
+  },
+  "score": 0.007645575476712302,
+  "best_val_total": 0.007645575476712302,
+  "best_val_recon": 0.0075495228122331596,
+  "best_val_adv": 9.60526426512699e-05
+}

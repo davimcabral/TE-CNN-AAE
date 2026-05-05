@@ -1,0 +1,24 @@
+{
+  "ticker": "AAPL",
+  "can_execute": true,
+  "tau_ticker": 1.270000000000001,
+  "entropy": 1.5849616520675016,
+  "best_params_raw": {
+    "batch_size": 64,
+    "window": 15,
+    "learning_rate": 0.001,
+    "lstm_units": 64
+  },
+  "best_params_encoder": {
+    "batch_size": 64,
+    "window": 15,
+    "learning_rate": 0.001,
+    "lstm_units": 64
+  },
+  "best_params_encoder_adversarial": {
+    "batch_size": 64,
+    "window": 15,
+    "learning_rate": 0.001,
+    "lstm_units": 128
+  }
+}

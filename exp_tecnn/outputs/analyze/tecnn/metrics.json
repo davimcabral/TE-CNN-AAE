@@ -1,0 +1,7 @@
+{
+  "emb_csv": "exp_tecnn_mock_protocol/outputs/embeddings_tecnn_mock.csv",
+  "silhouette": 0.321282,
+  "davies_bouldin": 1.198497,
+  "n_samples": 6525,
+  "n_dims": 64
+}

@@ -1,0 +1,54 @@
+{
+  "experiment_id": "exp_tecnn_mock_protocol",
+  "code_version": "tecnn_stateful_v8_mock_protocol",
+  "data_mode": "mock",
+  "mock_generator_version": "mock_vstable_md5",
+  "mock_seed_mode": "stable_md5_per_ticker",
+  "mock_start_date": "2018-01-01",
+  "mock_n_days": 1350,
+  "mock_seed": 123,
+  "train_start": "2018-01-01",
+  "train_end": "2022-12-31",
+  "test_start": "2023-01-01",
+  "test_end": "2023-01-31",
+  "arch_version_te": "tecnn_v2_tconv_decoder",
+  "arch_version_ae": "cnn_ae_table2b_v2",
+  "te_hsearch_done": true,
+  "ae_hsearch_done": true,
+  "te_best_arch": {
+    "filters": [
+      32,
+      64,
+      128
+    ],
+    "kernels": [
+      13,
+      7,
+      7
+    ],
+    "z_dim": 64,
+    "dropout": 0.1
+  },
+  "ae_best_arch": {
+    "filters": [
+      32,
+      32,
+      128
+    ],
+    "kernels": [
+      7,
+      7,
+      7
+    ],
+    "z_dim": 64,
+    "dropout": 0.1
+  },
+  "mockdata_done": true,
+  "te_train_done": true,
+  "te_embed_done": true,
+  "ae_train_done": true,
+  "ae_embed_done": true,
+  "analyze_done": true,
+  "labels_done": true,
+  "lstmstudy_done": false
+}

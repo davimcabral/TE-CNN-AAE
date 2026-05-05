@@ -1,0 +1,37 @@
+{
+  "best_score": 0.006179562794338716,
+  "best_arch": {
+    "filters": [
+      32,
+      32,
+      128
+    ],
+    "kernels": [
+      7,
+      7,
+      7
+    ],
+    "z_dim": 64,
+    "dropout": 0.1
+  },
+  "best_metrics": {
+    "trial_id": "ae_f32-32-128_k7-7-7",
+    "model_kind": "ae",
+    "arch": {
+      "filters": [
+        32,
+        32,
+        128
+      ],
+      "kernels": [
+        7,
+        7,
+        7
+      ],
+      "z_dim": 64,
+      "dropout": 0.1
+    },
+    "score": 0.006179562794338716,
+    "best_val_recon": 0.006179562794338716
+  }
+}
